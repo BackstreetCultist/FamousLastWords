@@ -1,7 +1,7 @@
 import markovify
 
 # Get raw text as string.
-with open("SampleData.txt") as f:
+with open("propaganda.txt") as f:
     text = f.read()
 
 # Build the model.
