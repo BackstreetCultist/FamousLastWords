@@ -4,6 +4,12 @@ import asyncio
 import websockets
 import constant
 
+#Don't touch these
+UPMOTOR = 2
+LEFTEYE = 3
+RIGHTEYE = 4
+DOWNMOTOR = 5
+
 def setGPIOs():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(UPMOTOR, GPIO.OUT)
@@ -39,6 +45,12 @@ async def start():
         act()
 
 
+print("Setting GPIOs")
 setGPIOs()
-asyncio.get_event_loop().run_until_complete(start())
+print("Sleeping")
+sleep(5)
+#asyncio.get_event_loop().run_until_complete(start())
+print("Acting")
+act()
+print("Done acting")
 GPIO.cleanup()
