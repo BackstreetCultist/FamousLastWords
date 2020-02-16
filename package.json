@@ -13,6 +13,7 @@
   "author": "Callum",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/language": "^3.7.2",
     "discord.js": "^11.5.1"
   }
 }
