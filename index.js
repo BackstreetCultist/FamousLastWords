@@ -2,10 +2,14 @@
 const Discord = require("discord.js");
 const config = require('./auth.json');
 const client = new Discord.Client();
+const {exec} = require("child_process");
 
-const timeout = 3000 // 3 sec
 
-/* Google API */ 
+const pythoncmd = process.env.PYTHON || "py"
+
+const timeout = 10 * 1000 // 10 sec
+
+/* Google API */
 const language = require("@google-cloud/language")
 const googleclient = new language.LanguageServiceClient();
 const wordList = require("./bannedWords.json")
@@ -73,8 +77,8 @@ var socket = null;
 const wss = new WebSocket.Server({port : process.env.PORT || 8080});
 wss.on('connection', (ws)=>{
   console.log("pi connected");
-  socket = ws; 
-}); 
+  socket = ws;
+});
 
 wss.on('close', (ws) => {
   console.log("pi disconnected");
@@ -87,10 +91,12 @@ var timer = setInterval (async function () {
     if (blacklistedUsers[id] > 0 )
     {
       var user = await client.fetchUser(id)
-      console.log(`sending ${user.username} a DM`)
-      blacklistedUsers[id] -= 1;
-      var dm = await user.createDM()
-      await dm.send("ur a peepee", {files:["./img.jpg"]})
+      exec(`chdir PropagandaAI && ${pythoncmd} SloganGenerator.py`, async function (){
+        console.log(`sending ${user.username} a DM`)
+        blacklistedUsers[id] -= 1;
+        var dm = await user.createDM()
+        await dm.send({files:["./PropagandaAI/img.png"]})
+      })
     }
   }
 }, timeout);
