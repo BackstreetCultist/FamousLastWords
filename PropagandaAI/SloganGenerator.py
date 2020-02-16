@@ -37,7 +37,31 @@ while (numberOfGoodSentences < numberOfSentences):
         slogans[numberOfGoodSentences] = slogan.split(" ")
         numberOfGoodSentences += 1
 
+counter = 0
+split = 0
+space = "\n\n\n\n\n\n\n\n\n"
+for i in range(len(slogans[0])):
+    counter += len(slogans[0][i])
+    if counter > 19:
+        slogans[0][i] = slogans[0][i].replace(slogans[0][i], "\n"+slogans[0][i])
+        counter = len(slogans[0][i])
+        split += 1
+    if split == 3:
+        slogans[0][i] = slogans[0][i].replace(slogans[0][i], space +slogans[0][i])
+        split = -5
+
+if split >= -3:
+    print('test')
+    for i in range(len(slogans[0])):
+        if "\n\n\n\n\n\n\n\n\n" in slogans[0][i]:
+            slogans[0][i] = slogans[0][i].replace(slogans[0][i], "\n\n\n\n\n\n\n\n")
+            if split >= -2:
+                slogans[0][i] = slogans[0][i].replace(slogans[0][i], "\n\n\n\n\n\n\n")
+            print('reducing space')
+
 slogans = list(map(lambda x: " ".join(x), slogans))
+
+print(slogans[0])
 
 imageID = random.randint(0, 16)
 background = Image.open("famous/background.png")
@@ -45,5 +69,5 @@ image = Image.open('famous/image'+str(imageID)+'.png')
 background.paste(image, (0, 300), image)
 font = ImageFont.truetype("/Library/Fonts/Impact.ttf", 100)
 draw = ImageDraw.Draw(background)
-draw.text((10, 0),slogans[0],(0,0,80),font=font)
+draw.text((20, 10),slogans[0],(0,0,80),font=font)
 background.show()
