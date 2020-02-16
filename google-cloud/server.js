@@ -1,33 +1,27 @@
+
 async function main()
 {
-    const speech = require("@google-cloud/speech");
-    const fs = require("fs");
+const language = require("@google-cloud/language")
 
-    const client = new speech.SpeechClient();
-    const filename = "./out.wav";
+const client = new language.LanguageServiceClient();
 
-    const file  = fs.readFileSync(filename);
+var text = process.argv[2]
 
-    const audio = {
-        content: file
-    };
+const document = {
+    content: text,
+    type: 'PLAIN_TEXT'
+}
 
-    const config = {
-        languageCode: 'en-UK'
-    }
+const [result] = await client.analyzeEntitySentiment({document});
+const entities = result.entities;
 
-    const request = {
-        audio: audio,
-        config: config
-    }
-
-    const [response] = await client.recognize(request);
-    const transcription = response.results
-    .map ( result => result.alternatives[0].transcript)
-    .join ('\n');
-
-    console.log(`${transcription}`) 
-
+console.log(`Entities and sentiments:`);
+entities.forEach(entity => {
+  console.log(`  Name: ${entity.name}`);
+  console.log(`  Type: ${entity.type}`);
+  console.log(`  Score: ${entity.sentiment.score}`);
+  console.log(`  Magnitude: ${entity.sentiment.magnitude}`);
+});
 }
 
 main().catch(console.error)
