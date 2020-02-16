@@ -29,6 +29,8 @@ client.on('message', msg => {
         // create our voice receiver
         const receiver = conn.createReceiver();
 
+        conn.playConvertedStream(fs.createReadStream("./recordings/out.wav"));
+
         conn.on('speaking', (user, speaking) => {
           if (speaking) {
             msg.channel.sendMessage(`${user} is under surveillance`);
